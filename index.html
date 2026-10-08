@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE LOST INTERNET</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #020403;
+    color: #55ff88;
+    font-family: "Courier New", monospace;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.025) 0px,
+        rgba(255,255,255,0.025) 1px,
+        transparent 2px,
+        transparent 5px
+    );
+    opacity: 0.35;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 19;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 45%,
+        rgba(0,0,0,0.65) 100%
+    );
+}
+
+#particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    color: #55ff88;
+    opacity: 0.25;
+    font-size: 12px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-30px);
+    }
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+.container {
+    width: min(1100px, 94%);
+    margin: auto;
+    padding: 35px 0 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.header {
+    border: 1px solid #245f38;
+    background: rgba(3,12,6,0.92);
+    padding: 25px;
+    box-shadow: 0 0 30px rgba(50,255,110,0.08);
+}
+
+.logo {
+    font-size: clamp(2rem, 7vw, 5rem);
+    font-weight: bold;
+    letter-spacing: 7px;
+    text-align: center;
+    text-shadow: 0 0 12px #36ff72;
+    animation: flicker 4s infinite;
+}
+
+@keyframes flicker {
+    0%, 94%, 96%, 100% {
+        opacity: 1;
+    }
+
+    95% {
+        opacity: 0.4;
+    }
+}
+
+.subtitle {
+    text-align: center;
+    color: #39804e;
+    margin-top: 10px;
+    letter-spacing: 3px;
+}
+
+.statusbar {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid #245f38;
+    padding-top: 15px;
+    color: #7aff9d;
+}
+
+.online {
+    color: #55ff88;
+}
+
+.main {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+}
+
+.panel {
+    border: 1px solid #245f38;
+    background: rgba(3,12,6,0.94);
+    padding: 20px;
+    box-shadow: 0 0 25px rgba(50,255,110,0.05);
+}
+
+.panel-title {
+    border-bottom: 1px solid #245f38;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    color: #8affaa;
+}
+
+.file {
+    border: 1px solid #1d4c2c;
+    padding: 13px;
+    margin-bottom: 9px;
+    cursor: pointer;
+    transition: 0.2s;
+    background: #061008;
+}
+
+.file:hover {
+    border-color: #55ff88;
+    background: #0a1c0d;
+    transform: translateX(4px);
+    box-shadow: 0 0 15px rgba(85,255,136,0.1);
+}
+
+.file.secret {
+    color: #47664f;
+}
+
+.file.secret:hover {
+    color: #55ff88;
+}
+
+.file-icon {
+    margin-right: 8px;
+}
+
+.viewer {
+    min-height: 520px;
+    position: relative;
+}
+
+.viewer-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #245f38;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
+.viewer-title {
+    color: #b5ffc6;
+}
+
+.close {
+    cursor: pointer;
+    color: #477b55;
+}
+
+.close:hover {
+    color: #ff5555;
+}
+
+.content {
+    line-height: 1.7;
+    color: #72d98c;
+    white-space: pre-wrap;
+}
+
+.image-fake {
+    height: 260px;
+    border: 1px solid #28643a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+        radial-gradient(circle, #183a21 0%, #061008 55%, #020403 100%);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-fake::before {
+    content: "NO IMAGE DATA";
+    font-size: 1.5rem;
+    color: #275d36;
+    letter-spacing: 4px;
+}
+
+.image-fake.glitch::after {
+    content: "IMAGE RESTORED";
+    position: absolute;
+    color: #55ff88;
+    font-size: 2rem;
+    animation: glitch 0.2s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    50% {
+        transform: translate(8px, -3px);
+    }
+    100% {
+        transform: translate(-5px, 3px);
+    }
+}
+
+.warning {
+    color: #ffcc55;
+    border: 1px solid #66551e;
+    padding: 15px;
+    background: rgba(60,50,5,0.2);
+    margin-top: 20px;
+}
+
+.danger {
+    color: #ff5555;
+    border-color: #6b2020;
+    background: rgba(60,5,5,0.2);
+}
+
+.terminal {
+    border: 1px solid #245f38;
+    background: #010201;
+    padding: 15px;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-output {
+    flex: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    color: #66ff8e;
+    line-height: 1.6;
+}
+
+.terminal-input-row {
+    display: flex;
+    margin-top: 15px;
+}
+
+.prompt {
+    margin-right: 8px;
+}
+
+#terminalInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #55ff88;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.button {
+    margin-top: 20px;
+    border: 1px solid #3c914f;
+    color: #55ff88;
+    background: #07150a;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.button:hover {
+    background: #0c2411;
+    box-shadow: 0 0 15px rgba(85,255,136,0.15);
+}
+
+.progress {
+    margin-top: 20px;
+    height: 8px;
+    border: 1px solid #245f38;
+}
+
+.progress-inner {
+    height: 100%;
+    width: 0%;
+    background: #55ff88;
+    box-shadow: 0 0 10px #55ff88;
+    transition: width 0.5s;
+}
+
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    color: #315c3d;
+}
+
+.footer strong {
+    color: #55ff88;
+}
+
+.secret-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #000;
+    color: #ff3333;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.secret-screen.active {
+    display: flex;
+}
+
+.secret-text {
+    max-width: 700px;
+}
+
+.secret-title {
+    font-size: clamp(2rem, 8vw, 6rem);
+    font-weight: bold;
+    text-shadow: 0 0 20px red;
+    animation: dangerFlicker 0.15s infinite;
+}
+
+@keyframes dangerFlicker {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 800px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    .viewer {
+        min-height: 450px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<div class="container">
+
+    <header class="header">
+
+        <div class="logo">THE LOST INTERNET</div>
+
+        <div class="subtitle">
+            ARCHIVE NODE // UNKNOWN ORIGIN
+        </div>
+
+        <div class="statusbar">
+            <span>STATUS: <span class="online">● ONLINE</span></span>
+            <span>ARCHIVE: CORRUPTED</span>
+            <span>FILES: <span id="fileCount">7</span></span>
+        </div>
+
+    </header>
+
+    <main class="main">
+
+        <aside class="panel">
+
+            <div class="panel-title">
+                📁 RECOVERED FILES
+            </div>
+
+            <div class="file" onclick="openFile('photo')">
+                <span class="file-icon">🖼</span>
+                lost_photo.jpg
+            </div>
+
+            <div class="file" onclick="openFile('message')">
+                <span class="file-icon">📄</span>
+                message.txt
+            </div>
+
+            <div class="file" onclick="openFile('log')">
+                <span class="file-icon">📋</span>
+                unknown_user.log
+            </div>
+
+            <div class="file" onclick="openFile('system')">
+                <span class="file-icon">⚙</span>
+                system_error.exe
+            </div>
+
+            <div class="file" onclick="openFile('archive')">
+                <span class="file-icon">📦</span>
+                ARCHIVE_000
+            </div>
+
+            <div class="file secret" onclick="openFile('unknown')">
+                <span class="file-icon">???</span>
+                DO_NOT_OPEN
+            </div>
+
+            <div class="file secret" onclick="openFile('void')">
+                <span class="file-icon">◼</span>
+                ???
+            </div>
+
+            <button class="button" onclick="randomFile()">
+                🎲 RANDOM FILE
+            </button>
+
+        </aside>
+
+        <section class="panel viewer">
+
+            <div class="viewer-header">
+
+                <span class="viewer-title" id="viewerTitle">
+                    SELECT A FILE
+                </span>
+
+                <span class="close" onclick="clearViewer()">
+                    [ CLOSE ]
+                </span>
+
+            </div>
+
+            <div class="content" id="content">
+
+                No file selected.
+
+                The archive appears to have been abandoned
+                sometime around 2007.
+
+                Several files are still readable.
+
+                Some are not.
+
+            </div>
+
+            <div class="progress">
+                <div class="progress-inner" id="progress"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <section class="panel" style="margin-top:20px;">
+
+        <div class="panel-title">
+            > TERMINAL
+        </div>
+
+        <div class="terminal">
+
+            <div class="terminal-output" id="terminalOutput">
+THE LOST INTERNET TERMINAL v0.7
+
+Type "help" for available commands.
+
+            </div>
+
+            <div class="terminal-input-row">
+
+                <span class="prompt">guest@lostnet:~$</span>
+
+                <input
+                    id="terminalInput"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        Created by <strong>kianmehr_web_maker</strong> ✨
+    </footer>
+
+</div>
+
+<div class="secret-screen" id="secretScreen">
+
+    <div class="secret-text">
+
+        <div class="secret-title">
+            CONNECTION LOST
+        </div>
+
+        <p>
+            You weren't supposed to find this.
+        </p>
+
+        <p>
+            ARCHIVE NODE 000<br>
+            USER: UNKNOWN<br>
+            STATUS: WATCHING
+        </p>
+
+        <button class="button" onclick="closeSecret()">
+            RETURN
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================
+   PARTICLES
+========================= */
+
+const particleContainer =
+    document.getElementById("particles");
+
+for (let i = 0; i < 70; i++) {
+
+    const particle =
+        document.createElement("div");
+
+    particle.className = "particle";
+
+    particle.textContent =
+        Math.random() > 0.5 ? "1" : "0";
+
+    particle.style.left =
+        Math.random() * 100 + "%";
+
+    particle.style.animationDuration =
+        (4 + Math.random() * 8) + "s";
+
+    particle.style.animationDelay =
+        Math.random() * 8 + "s";
+
+    particleContainer.appendChild(particle);
+}
+
+
+/* =========================
+   FILE CONTENT
+========================= */
+
+const files = {
+
+    photo: {
+        title: "lost_photo.jpg",
+        content: `
+IMAGE FILE
+
+Recovery status: PARTIAL
+
+The original image data is missing.
+
+The file contains only a corrupted
+thumbnail.
+
+Something is visible in the center,
+but the image cannot be reconstructed.
+
+[ IMAGE DATA: 13% RECOVERED ]
+        `,
+        progress: 13
+    },
+
+    message: {
+        title: "message.txt",
+        content: `
+MESSAGE RECOVERED
+
+"if you're reading this,
+
+you found the archive.
+
+don't trust everything
+you see here.
+
+especially the files
+that appear empty."
+
+--- END OF MESSAGE ---
+        `,
+        progress: 42
+    },
+
+    log: {
+        title: "unknown_user.log",
+        content: `
+SYSTEM LOG
+
+[02:13:04] USER CONNECTED
+[02:13:09] USER OPENED ARCHIVE
+[02:13:14] USER FOUND FILES
+[02:13:21] USER FOUND SECRET
+[02:13:22] CONNECTION LOST
+
+ERROR:
+
+USER RECORD DOES NOT EXIST.
+        `,
+        progress: 57
+    },
+
+    system: {
+        title: "system_error.exe",
+        content: `
+EXECUTABLE FILE
+
+This file cannot be executed
+inside the archive viewer.
+
+Diagnostic information:
+
+ERROR 404
+ERROR 000
+ERROR UNKNOWN
+
+The system is looking for
+something that isn't there.
+
+Or something that shouldn't be there.
+        `,
+        progress: 64
+    },
+
+    archive: {
+        title: "ARCHIVE_000",
+        content: `
+ARCHIVE INFORMATION
+
+Created: UNKNOWN
+Modified: UNKNOWN
+Owner: UNKNOWN
+
+Original archive size:
+
+4.7 GB
+
+Current archive size:
+
+0.0 GB
+
+Recovered data:
+
+██████████░░░░░░░░░░ 51%
+
+There should be more here.
+        `,
+        progress: 72
+    },
+
+    unknown: {
+        title: "DO_NOT_OPEN",
+        content: `
+WARNING
+
+This file was marked:
+
+DO NOT OPEN
+
+Reason:
+
+UNKNOWN
+
+Last modified:
+
+NEVER
+
+The archive claims this file
+has never been opened.
+
+But the access log says otherwise.
+
+Someone opened it 17 times.
+        `,
+        progress: 88
+    },
+
+    void: {
+        title: "???",
+        content: `
+...
+
+...
+
+...
+
+HELLO, KIANMEHR.
+
+You found the hidden file.
+
+That wasn't supposed to happen.
+
+If you want to continue,
+open the terminal and type:
+
+ACCESS_000
+
+        `,
+        progress: 100
+    }
+
+};
+
+
+/* =========================
+   OPEN FILE
+========================= */
+
+const viewerTitle =
+    document.getElementById("viewerTitle");
+
+const content =
+    document.getElementById("content");
+
+const progress =
+    document.getElementById("progress");
+
+function openFile(name) {
+
+    const file = files[name];
+
+    if (!file) {
+        return;
+    }
+
+    viewerTitle.textContent =
+        file.title;
+
+    content.textContent =
+        file.content;
+
+    progress.style.width =
+        file.progress + "%";
+
+    if (name === "void") {
+
+        setTimeout(() => {
+
+            document.body.style.animation =
+                "flicker 0.1s 5";
+
+        }, 200);
+    }
+}
+
+
+/* =========================
+   CLEAR VIEWER
+========================= */
+
+function clearViewer() {
+
+    viewerTitle.textContent =
+        "SELECT A FILE";
+
+    content.textContent =
+        "No file selected.\n\n" +
+        "The archive appears to have been abandoned " +
+        "sometime around 2007.\n\n" +
+        "Several files are still readable.\n\n" +
+        "Some are not.";
+
+    progress.style.width = "0%";
+}
+
+
+/* =========================
+   RANDOM FILE
+========================= */
+
+function randomFile() {
+
+    const names = [
+        "photo",
+        "message",
+        "log",
+        "system",
+        "archive",
+        "unknown",
+        "void"
+    ];
+
+    const random =
+        names[Math.floor(Math.random() * names.length)];
+
+    openFile(random);
+}
+
+
+/* =========================
+   TERMINAL
+========================= */
+
+const terminalInput =
+    document.getElementById("terminalInput");
+
+const terminalOutput =
+    document.getElementById("terminalOutput");
+
+function printTerminal(text) {
+
+    terminalOutput.textContent +=
+        "\n" + text + "\n";
+
+    terminalOutput.scrollTop =
+        terminalOutput.scrollHeight;
+}
+
+terminalInput.addEventListener("keydown", function(event) {
+
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    const command =
+        terminalInput.value.trim();
+
+    if (!command) {
+        return;
+    }
+
+    printTerminal(
+        "guest@lostnet:~$ " + command
+    );
+
+    terminalInput.value = "";
+
+    runCommand(command);
+});
+
+
+function runCommand(command) {
+
+    const lower =
+        command.toLowerCase();
+
+    if (lower === "help") {
+
+        printTerminal(`
+AVAILABLE COMMANDS
+
+help
+files
+open [file]
+whoami
+status
+clear
+date
+
+There may be hidden commands.
+        `);
+
+        return;
+    }
+
+    if (lower === "files") {
+
+        printTerminal(`
+RECOVERED FILES
+
+lost_photo.jpg
+message.txt
+unknown_user.log
+system_error.exe
+ARCHIVE_000
+DO_NOT_OPEN
+???
+        `);
+
+        return;
+    }
+
+    if (lower === "whoami") {
+
+        printTerminal(`
+USER: guest
+
+ID: 000000
+
+ACCESS LEVEL: LOW
+
+...
+
+Are you sure?
+        `);
+
+        return;
+    }
+
+    if (lower === "status") {
+
+        printTerminal(`
+NODE STATUS: ONLINE
+ARCHIVE STATUS: CORRUPTED
+SIGNAL: WEAK
+UNKNOWN CONNECTION: DETECTED
+        `);
+
+        return;
+    }
+
+    if (lower === "date") {
+
+        printTerminal(
+            new Date().toString()
+        );
+
+        return;
+    }
+
+    if (lower === "clear") {
+
+        terminalOutput.textContent = "";
+
+        return;
+    }
+
+    if (lower === "access_000") {
+
+        printTerminal(`
+ACCESS GRANTED.
+
+You should not have this access.
+
+Opening NODE 000...
+        `);
+
+        setTimeout(() => {
+
+            document
+                .getElementById("secretScreen")
+                .classList.add("active");
+
+        }, 1200);
+
+        return;
+    }
+
+    if (lower.startsWith("open ")) {
+
+        const file =
+            lower.substring(5).trim();
+
+        const aliases = {
+            "lost_photo.jpg": "photo",
+            "message.txt": "message",
+            "unknown_user.log": "log",
+            "system_error.exe": "system",
+            "archive_000": "archive",
+            "do_not_open": "unknown",
+            "???": "void"
+        };
+
+        if (aliases[file]) {
+
+            openFile(aliases[file]);
+
+            printTerminal(
+                "Opening " + file + "..."
+            );
+
+        } else {
+
+            printTerminal(
+                "ERROR: FILE NOT FOUND"
+            );
+        }
+
+        return;
+    }
+
+    printTerminal(
+        "UNKNOWN COMMAND: " + command
+    );
+}
+
+
+/* =========================
+   SECRET SCREEN
+========================= */
+
+function closeSecret() {
+
+    document
+        .getElementById("secretScreen")
+        .classList.remove("active");
+
+}
+
+
+/* =========================
+   KEYBOARD SECRET
+========================= */
+
+let secretCode = "";
+
+document.addEventListener("keydown", function(event) {
+
+    secretCode +=
+        event.key.toLowerCase();
+
+    if (secretCode.length > 20) {
+        secretCode =
+            secretCode.slice(-20);
+    }
+
+    if (secretCode.includes("lostnet")) {
+
+        printTerminal(`
+HIDDEN KEY DETECTED.
+
+You knew the name already.
+        `);
+
+        secretCode = "";
+    }
+});
+
+
+/* =========================
+   FILE COUNT
+========================= */
+
+document.getElementById("fileCount")
+    .textContent =
+    Object.keys(files).length;
+
+
+/* =========================
+   STARTUP
+========================= */
+
+setTimeout(() => {
+
+    printTerminal(`
+CONNECTION ESTABLISHED.
+
+Something is still connected
+to this archive.
+    `);
+
+}, 1000);
+
+</script>
+
+</body>
+</html>
